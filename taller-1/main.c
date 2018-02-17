@@ -179,14 +179,17 @@ void array_addition(float *destiny,
 void matrix_write( float **matrix ,int rows ,int cols, char *filename )
 {
     int i,j;
-    printf("\n");
+    FILE *f;
+    f = fopen(filename, "w+");
+
     for(i=0; i<rows; ++i)
         for(j=0; j<cols; ++j)
         {
-            printf("%f", matrix[i][j]);
+            fprintf(f,"%f", matrix[i][j]);
             if(j == cols-1)
-                printf("\n");
+                fprintf(f,"\n");
             else
-                printf(",");
+                fprintf(f,",");
         }
+    fclose(f); 
 }
