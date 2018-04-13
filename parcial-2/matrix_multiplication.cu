@@ -7,7 +7,7 @@ int col_counter(FILE* fp);
 void read_matrix(FILE* fp,unsigned int *data);
 void print_matrix(unsigned int *data,int mRr, int mRc);
 
-__global__ void gpu_matrix_mult(int *m1,int *m2, int *mR, int m1r, int m1c, int m2c)
+__global__ void matrix_multiplication(int *m1,int *m2, int *mR, int m1r, int m1c, int m2c)
 { 
     int row = blockIdx.y * blockDim.y + threadIdx.y; 
     int col = blockIdx.x * blockDim.x + threadIdx.x;
