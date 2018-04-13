@@ -5,6 +5,23 @@
 int row_counter(FILE* fp);
 int col_counter(FILE* fp);
 void read_matrix(FILE* fp,unsigned int *data);
+void print_matrix(unsigned int *data,int mRr, int mRc);
+
+__global__ void gpu_matrix_mult(int *m1,int *m2, int *mR, int m1r, int m1c, int m2c)
+{ 
+    int row = blockIdx.y * blockDim.y + threadIdx.y; 
+    int col = blockIdx.x * blockDim.x + threadIdx.x;
+    int sum = 0;
+    int i = 0;
+    if( col < m2c && row < m1r) 
+    {
+        for(i = 0; i < m1c; i++) 
+        {
+            sum += m1[row * m1c + i] * m2[i * m2c + col];
+        }
+        mR[row * m2c + col] = sum;
+    }
+} 
 
 int main(int argc, char **argv)
 {
@@ -13,7 +30,8 @@ int main(int argc, char **argv)
         return 1;
     }
     //Vars Declaration
-    int m1r,m1c,m2r,m2c,mRr,mRc;
+    int m1r,m1c,m2r,m2c,mRr,mRc; //rows & cols
+    int m1s,m2s,mRs;  //size
     unsigned int *gpu_m1, *cpu_m1;
     unsigned int *gpu_m2, *cpu_m2;
     unsigned int *gpu_mR, *cpu_mR;
@@ -49,15 +67,18 @@ int main(int argc, char **argv)
     }
 
     //reserve memory to each matrix
-    cpu_m1 = (unsigned int*)malloc(m1r*m1c*sizeof(unsigned int));
-    cpu_m2 = (unsigned int*)malloc(m2r*m2c*sizeof(unsigned int));
-    cpu_mR = (unsigned int*)malloc(mRr*mRc*sizeof(unsigned int));
-    /// err = cudaMalloc((void**)&gpu_m1,m1r*m1c*sizeof(unsigned int));
-    /// if(err != cudaSuccess){printf("Error with Matrix 1\n");exit(1);}
-    /// err = cudaMalloc((void**)&gpu_m2,m2r*m2c*sizeof(unsigned int));
-    /// if(err != cudaSuccess){printf("Error with Matrix 2\n");exit(1);}
-    /// err = cudaMalloc((void**)&gpu_mR,mRr*mRc*sizeof(unsigned int));
-    /// if(err != cudaSuccess){printf("Error with Matrix R\n");exit(1);}
+    m1s = m1r*m1c*sizeof(unsigned int);
+    m2s = m2r*m2c*sizeof(unsigned int);
+    mRs = mRr*mRc*sizeof(unsigned int);
+    cpu_m1 = (unsigned int*)malloc(m1s);
+    cpu_m2 = (unsigned int*)malloc(m2s);
+    cpu_mR = (unsigned int*)malloc(mRs);
+    err = cudaMalloc((void**)&gpu_m1,m1s);
+    if(err != cudaSuccess){printf("Error with Matrix 1\n");exit(1);}
+    err = cudaMalloc((void**)&gpu_m2,m2s);
+    if(err != cudaSuccess){printf("Error with Matrix 2\n");exit(1);}
+    err = cudaMalloc((void**)&gpu_mR,mRs);
+    if(err != cudaSuccess){printf("Error with Matrix R\n");exit(1);}
 
     //Read the Files to the CPU memory
     read_matrix(fp1,cpu_m1);
@@ -65,6 +86,25 @@ int main(int argc, char **argv)
     //Now the files can be closed
     fclose(fp1);
  	fclose(fp2);
+
+    //Copy each matrix to the device
+    err = cudaMemcpy(gpu_m1, cpu_m1, m1s, cudaMemcpyHostToDevice);
+    if(err != cudaSuccess){printf("Error Coping Matrix 1\n");exit(1);}
+    err = cudaMemcpy(gpu_m2, cpu_m2, m2s, cudaMemcpyHostToDevice);
+    if(err != cudaSuccess){printf("Error Coping Matrix 2\n");exit(1);}
+
+    //Execute the Kernel in the Device
+    int tile_dim = 32;
+    dim3 block_dim(tile_dim,tile_dim,1);
+    dim3 grid_dim(ceil(mRc/float(tile_dim)),ceil(mRr/float(tile_dim)),1);
+
+    matrix_multiplication<<<grid_dim,block_dim>>>(gpu_m1, gpu_m2, gpu_mR, m1r, m1c, m2c);
+
+    //copy the result to Host mem
+    err = cudaMemcpy(cpu_mR,gpu_mR,mRs, cudaMemcpyDeviceToHost);
+    if(err != cudaSuccess){printf("Error Coping Matrix R\n");exit(1);}
+
+    print_matrix(cpu_mR, mRr, mRc);
 
 }
 
@@ -110,5 +150,20 @@ void read_matrix(FILE* fp,unsigned int *data){
         }
     }
     rewind(fp);
+    return;
+}
+void print_matrix(unsigned int *data,int mRr, int mRc){
+    int row, col;
+    for (int row=0; row<mRr; row++)
+    {
+        for(int col=0; col<mRc; col++)
+            {
+             printf("%d", data[row][col]);
+            }
+        if(row != mRr - 1){
+            //if isn't the last line print return
+            printf("\n");
+        }
+    }
     return;
 }
