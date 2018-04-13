@@ -57,9 +57,9 @@ int main(int argc, char **argv)
     m2c = col_counter(fp2);
     mRr = m1r;
     mRc = m2c;
-    printf("Matrix 1: %dx%d\n", m1r,m1c);
-    printf("Matrix 2: %dx%d\n", m2r,m2c);
- 	
+    //printf("Matrix 1: %dx%d\n", m1r,m1c);
+    //printf("Matrix 2: %dx%d\n", m2r,m2c);
+	
     //condition: the number of columns in A must equal the number of rows in B
     if(m1c != m2r){
         printf("Incorrect Matrix Size, cols of Matrix 1 (%d) are different of the rows of Matrix 2 (%d)\n",m1c,m2r );
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
     read_matrix(fp2,cpu_m2);
     //Now the files can be closed
     fclose(fp1);
- 	fclose(fp2);
+	fclose(fp2);
 
     //Copy each matrix to the device
     err = cudaMemcpy(gpu_m1, cpu_m1, m1s, cudaMemcpyHostToDevice);
@@ -146,7 +146,6 @@ void read_matrix(FILE* fp,unsigned int *data){
             if(pot == 0){
                 pot = 1;
             }
-            printf("=%d\n",temp );
         }
     }
     rewind(fp);
@@ -159,6 +158,9 @@ void print_matrix(unsigned int *data,int mRr, int mRc){
         for(col=0; col<mRc; col++)
             {
              printf("%d", data[row * mRc + col]);
+	     if(row != mRc - 1){
+		printf(",");
+	     }
             }
         if(row != mRr - 1){
             //if isn't the last line print return
