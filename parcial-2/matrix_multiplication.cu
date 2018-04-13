@@ -158,7 +158,7 @@ void print_matrix(unsigned int *data,int mRr, int mRc){
     {
         for(col=0; col<mRc; col++)
             {
-             printf("%d", data[row][col]);
+             printf("%d", data[row * mRc + col]);
             }
         if(row != mRr - 1){
             //if isn't the last line print return
