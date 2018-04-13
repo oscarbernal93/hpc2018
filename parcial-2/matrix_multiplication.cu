@@ -35,7 +35,7 @@ int main(int argc, char **argv)
     unsigned int *gpu_m1, *cpu_m1;
     unsigned int *gpu_m2, *cpu_m2;
     unsigned int *gpu_mR, *cpu_mR;
-    /// cudaError_t err = cudaSuccess;
+    cudaError_t err = cudaSuccess;
 	// Open the files
     FILE* fp1 = fopen(argv[1], "r");
     FILE* fp2 = fopen(argv[2], "r");
@@ -154,9 +154,9 @@ void read_matrix(FILE* fp,unsigned int *data){
 }
 void print_matrix(unsigned int *data,int mRr, int mRc){
     int row, col;
-    for (int row=0; row<mRr; row++)
+    for (row=0; row<mRr; row++)
     {
-        for(int col=0; col<mRc; col++)
+        for(col=0; col<mRc; col++)
             {
              printf("%d", data[row][col]);
             }
