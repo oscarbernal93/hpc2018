@@ -48,16 +48,16 @@ int main(int argc, char const *argv[])
 	float tmp,pivot;
 	float lesser = INF;
 	float COEF[numRest][numVars] = {
-		{1,2,1,5,1,0,0,0,0},
-		{6,1,0,3,0,1,0,0,0},
-		{2,8,4,8,0,0,1,0,0},
-		{1,1,1,5,0,0,0,1,0},
-		{1,1,3,0,0,0,0,0,1}
+		{8,0,1,5,1,0,0,0,0},
+		{1,1,0,0,0,1,0,0,0},
+		{2,1,4,8,0,0,1,0,0},
+		{0,3,1,0,0,0,0,1,0},
+		{2,0,3,1,0,0,0,0,1}
 	};
 	float C[numRest]   = {0};
 	float B[numRest]   = {4,5,6,7,8};
-	float P[numRest+1] = {1,4,24,3,41,0};
-	float Z0[numVars]  = {18,2,4,12,0,0,0,0,0};
+	float P[numRest+1] = {6,4,24,3,41,0};
+	float Z0[numVars]  = {18,24,25,12,0,0,0,0,0};
 	float Z[numVars]   = {0};
 	for (int i = 0; i < numVars - numRest; ++i)
 	{

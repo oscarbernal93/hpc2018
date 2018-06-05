@@ -29,7 +29,10 @@ const int numVars = 2 + numRest;
 using namespace std;
 
 template<typename T>
-void log(T data, string s = "log");
+void log(T data, string s = "log")
+{
+    cout << s << ": " << data << endl;
+}
 void nop;
 int count_negatives(float* V,int size);
 int index_of_lesser(float* V,int size);
@@ -128,11 +131,6 @@ int main(int argc, char const *argv[])
 	return 0;
 }
 
-template<typename T>
-void log(T data, string s = "log")
-{
-    cout << s << ": " << data << endl;
-}
 void nop{
 	return;
 }
