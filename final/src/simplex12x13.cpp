@@ -64,7 +64,7 @@ int main(int argc, char const *argv[])
 	};
 	float C[numRest]   = {0};
 	float B[numRest]   = {12,13,14,15,16,17,18,19,20,21,22,23,24};
-	float P[numRest+1] = {94,93,92,91,90,29,28,27,26,25,24,23,0};
+	float P[numRest+1] = {94,93,92,91,90,29,28,27,26,25,24,23,12,0};
 	float Z0[numVars]  = {8,8,7,7,6,6,5,5,4,4,3,2,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	float Z[numVars]   = {0};
 	for (int i = 0; i < numVars - numRest; ++i)
