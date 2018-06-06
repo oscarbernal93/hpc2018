@@ -40,7 +40,7 @@ The Monte Carlo Method give us a process to solve big problems using randomness,
 %
 %
 \section{Introduction}
-put here something to say
+Es facil pensar en que un algoritmo puede ser mejor que otro, en especial cuando se trata de hacer tareas en paralelo, pero para poder lograr una comprension real de las implicaciones de una afirmación como esta se requiere, no solo un entendimiento de los algoritmos, si no tambien realizar un proceso de experimentacion, donde se pueda comprobar con datos reales la hipotesis planteada.
 
 \subsection{Linear Optimization}
 description of the broblems
@@ -51,14 +51,25 @@ method description
 \subsection{Monte Carlo Method}
 whats up w tho method?
 
-\subsection{Paralle computing}
+\subsection{Parallel computing}
 whats up w tho method?
 
 \subsection{Hipotesis}
-Montecarlo is better than simplex to solve LP prablems with large number of vars
+Teniendo en cuenta la informacion sobre los dos metodos que se abordan en este documento se plantea la siguient hipotesis: 
+Montecarlo es mejor que el metodo Simplex para solucionar problemas de Optimizacion Lineales con un gran numero de variables.
 
 \section{Implementation}
-put here something to say
+Para poder poner a prueba esta hipotesis se desarrollaron 3 implementaciones, la primera y mas basica es una implementacion secuencial del metodo simplex, la segunda es una implementacion lineal del metodo montecarlo, y la ultima una version concurrente del metodo montecarlo.
+
+\subsection{Sequential Simplex Method}
+El metodo simplex parte de una matriz nx(m+n) donde n es el numero de variables del problema y m es el numero de restricciones, sobre esta matriz se empieza a iterar cambiando los valores de ciertas filas y columnas en cada iteracion, hasta que se encuentra la solucion.
+Para evitar 
+
+\subsection{Sequential Monte Carlo Method}
+whats up w tho method?
+
+\subsection{Parallel Monte Carlo Method}
+whats up w tho method?
 
 \section{Results}
 put here something to say
