@@ -23,8 +23,8 @@
 #include <string>
 #include <iomanip>
 
-const int numRest = 13;
-const int numVars = 12 + numRest;
+const int numRest = 23;
+const int numVars = 22 + numRest;
 
 using namespace std;
 

@@ -14,7 +14,7 @@
 
 \begin{document}
 %
-\title{Simplex vs. Montecarlo, a brief comparision.\thanks{Supported by Universidad Tecnológica de Pereira.}}
+\title{Simplex vs. Montecarlo usign parallel computing, a brief comparision.\thanks{Supported by Universidad Tecnológica de Pereira.}}
 %
 %\titlerunning{Abbreviated paper title}
 % If the paper title is too long for the running head, you can set
@@ -43,16 +43,16 @@ The Monte Carlo Method give us a process to solve big problems using randomness,
 Es facil pensar en que un algoritmo puede ser mejor que otro, en especial cuando se trata de hacer tareas en paralelo, pero para poder lograr una comprension real de las implicaciones de una afirmación como esta se requiere, no solo un entendimiento de los algoritmos, si no tambien realizar un proceso de experimentacion, donde se pueda comprobar con datos reales la hipotesis planteada.
 
 \subsection{Linear Optimization}
-description of the problems
+La optimizacion Lineal, tambien conocida como Programacion Lineal, y es el campo de la Optimizacion que se encarga de resolver problemas donde el objetivo es maximizar una funcion sujeta a una serie de restricciones expresadas mediante inecuaciones lineales. 
 
 \subsection{Simplex Method}
-method description
+El metodo Simplex es un metodo iterativo, que es usado por excelencia en el campo de la Optimizacion Lineal, se comporta como un algoritmo de pivote y va recorriendo los vertices de un poliedro n-dimensional, siendo n el numero de variables.
 
 \subsection{Monte Carlo Method}
-method description
+El metodo Monte Carlo es un metodo no determinista, que se utiliza para la aproximacion de problemas matematicos complejos y computacionalmente costos. Tiene su fundamento en la aleatoriedad mediante la cual va generando puntos que se evaluan y determinan posibles soluciones.
 
 \subsection{Parallel computing}
-what is this?
+La computacion paralela es la forma de computo en la que muchas instrucciones son ejecutadas simultaneamente, parte del principio de que los grandes problemas a menudo se pueden dividir en problemas mas pequeños y resolver individualmente.
 
 \subsection{Hipotesis}
 Teniendo en cuenta la informacion sobre los dos metodos que se abordan en este documento se plantea la siguient hipotesis: 
@@ -81,15 +81,26 @@ Asi se tiene que aunque el metodo Simplex tiene una complejidad de orden cuadrad
 
 \begin{figure}
 \includegraphics[width=\textwidth]{fig1.eps}
-\caption{A figure caption is always placed below the illustration.
-Please note that short captions are centered, while long ones are
-justified by the macro package automatically.} \label{fig1}
+\caption{tiempo de ejecucion en milisegundos de cada algoritmo para diferentes numeros de variables en los problemas de optimizacion lineal} \label{fig1}
 \end{figure}
 
-\section{Conclusions}
-put here something to say
+Adicionalmente se observo, durante la toma de datos, que dificilmente se encuentran problemas de optimizacion lineal de un gran numero de variables, el problema de mayor tamaño encontrado fue de 8 variables, todos los demas problemas se construyeron artificialmente para probar el comportamiento de los metodos. El valor mas grande probado fue de 22 variables y 23 restricciones. 
+\paragraph{}
+El metodo Monte Carlo, a diferencia del metodo Simplex, encuentra valores cercanos o aproximados a la respuesta esperada, no siempre el valor exacto, y en esto el Metodo Simplex puede llevarle tambien una ventaja, pero esto solo ocurre en los casos en los que es problema tiene una solucion unica. En los casos en que esto no es asi, el metodo Monte Carlo encuentra una solucion factible, en lugar de bloquearse como el metodo simplex.  
+\paragraph{}
+Para problemas de optimizacion no lineales el metodo Monte Carlo se puede adaptar con pocos cambios y conservando sus propiedades, mientras que el metodo simplex se hace inutil y se requieren dintintos metodos que cambian dependiendo del tipo de problema.
 
-no siempre paralelo es mejor, 
+\section{Conclusions}
+\paragraph{}
+No siempre paralelo es mejor, es facil pensar que al utilizar una alternativa paralela para la solucion de un problema se pueden obtener mejores resultados, pero esto siempre depende de la naturaleza del problema y es necesario realizar un correcto analisis para determinar si la implementacion de un metodo paralelo es la mejor opcion.
+\paragraph{}
+El orden de complejidad de un algoritmo es una gran ayuda para conocer el posible desempeño del mismo, pero se debe tener tambien en cuenta el comportamiento comun del mismo, ya que existe la posibilidad que el caso comun no sea el peor de los casos.
+\paragraph{}
+En todo proceso de experimentacion es importante tener claramente definida la hipotesis y realizar un buen analisis del problema, pero tambien prestar mucha atencion a los resultados, ya que no siempre el resultado sera e esperado y es importante determinar el porque de estos resultados.
+\paragraph{}
+La computacion de alto rendimiento es una tecnologia que brinda muchas posibilidades, pero como cualquier tecnologia debe utilizarse responsablemente y su capacidad dependera de la formulacion y la implementacion de las algoritmos que se desarrollen para ella. 
+\paragraph{}
+El metodo Monte Carlo se presta para resolver toda una gama de problemas diferentes, mientras que el metodo simplex se especializa en una sola clase de problemas y resulta ser muy optimo. De esta forma se puede concluir que una solucion general no siempre es la mejor alternativa, a veces es mejor tener soluciones optimzadas a los requerimientos del problema. 
 
 %
 % ---- Bibliography ----
@@ -100,25 +111,15 @@ no siempre paralelo es mejor,
 % \bibliographystyle{splncs04}
 % \bibliography{mybibliography}
 %
-\begin{thebibliography}{8}
-\bibitem{ref_article1}
-Author, F.: Article title. Journal \textbf{2}(5), 99--110 (2016)
+%\begin{thebibliography}{8}
+%\bibitem{ref_article1}
+%Author, F.: Article title. Journal \textbf{2}(5), 99--110 (2016)
+%
+%\bibitem{ref_lncs1}
+%Author, F., Author, S.: Title of a proceedings paper. In: Editor,
+%F., Editor, S. (eds.) CONFERENCE 2016, LNCS, vol. 9999, pp. 1--13.
+%Springer, Heidelberg (2016). \doi{10.10007/1234567890}
+%
+%\end{thebibliography}
 
-\bibitem{ref_lncs1}
-Author, F., Author, S.: Title of a proceedings paper. In: Editor,
-F., Editor, S. (eds.) CONFERENCE 2016, LNCS, vol. 9999, pp. 1--13.
-Springer, Heidelberg (2016). \doi{10.10007/1234567890}
-
-\bibitem{ref_book1}
-Author, F., Author, S., Author, T.: Book title. 2nd edn. Publisher,
-Location (1999)
-
-\bibitem{ref_proc1}
-Author, A.-B.: Contribution title. In: 9th International Proceedings
-on Proceedings, pp. 1--2. Publisher, Location (2010)
-
-\bibitem{ref_url1}
-LNCS Homepage, \url{http://www.springer.com/lncs}. Last accessed 4
-Oct 2017
-\end{thebibliography}
 \end{document}
