@@ -43,16 +43,16 @@ The Monte Carlo Method give us a process to solve big problems using randomness,
 Es facil pensar en que un algoritmo puede ser mejor que otro, en especial cuando se trata de hacer tareas en paralelo, pero para poder lograr una comprension real de las implicaciones de una afirmación como esta se requiere, no solo un entendimiento de los algoritmos, si no tambien realizar un proceso de experimentacion, donde se pueda comprobar con datos reales la hipotesis planteada.
 
 \subsection{Linear Optimization}
-description of the broblems
+description of the problems
 
 \subsection{Simplex Method}
 method description
 
 \subsection{Monte Carlo Method}
-whats up w tho method?
+method description
 
 \subsection{Parallel computing}
-whats up w tho method?
+what is this?
 
 \subsection{Hipotesis}
 Teniendo en cuenta la informacion sobre los dos metodos que se abordan en este documento se plantea la siguient hipotesis: 
@@ -62,62 +62,22 @@ Montecarlo es mejor que el metodo Simplex para solucionar problemas de Optimizac
 Para poder poner a prueba esta hipotesis se desarrollaron 3 implementaciones, la primera y mas basica es una implementacion secuencial del metodo simplex, la segunda es una implementacion lineal del metodo montecarlo, y la ultima una version concurrente del metodo montecarlo.
 
 \subsection{Sequential Simplex Method}
-El metodo simplex parte de una matriz nx(m+n) donde n es el numero de variables del problema y m es el numero de restricciones, sobre esta matriz se empieza a iterar cambiando los valores de ciertas filas y columnas en cada iteracion, hasta que se encuentra la solucion.
-Para evitar 
+El metodo Simplex parte de una matriz nxm donde n es el numero de variables del problema y m es el numero de restricciones, sobre esta matriz se empieza a iterar cambiando los valores de ciertas filas y columnas en cada iteracion, hasta que se encuentra la solucion.
+Este metodo tiene una complejidad algoritmica de orden cuadrado O(n2)­ en el peor de los casos, y en el mejor una complejidad de orden lineal (n+m)
 
 \subsection{Sequential Monte Carlo Method}
-whats up w tho method?
+El metodo Monte Carlo en su version secuencial realiza un numero fijo de pasos, que para este estudio es de 21.474.836, en los cuales genera n numeros aleatorios y luego realiza m+1 validaciones (siendo n y m el numero de variables y de restricciones respectivamente), para determinar si estos numeros cumplen con las condiciones del algoritmo, este ciclo se realiza multiples veces, obteniendo cada vez distintos valores guardando unicamente el estado para el cual el problema de optimizacion lineal es maximo.
+Este metodo tiene una complejidad algoritmica de orden lineal O(n) en cualquier caso, ya que sin importar el resultado el se ejecuta un numero fija de veces, que no aumenta ni disminuye. 
 
 \subsection{Parallel Monte Carlo Method}
-whats up w tho method?
+La implementacion paralela del metodo de Monte Carlo crea una cantidad fija de hilos en cada bloque, que para este caso son 1024, y una rejilla de 1024 bloques, se utiliza una estructura lineal tanto para la distribucion de la rejilla asi como para la del bloque, para facilitar la comprension del algoritmo, pero esta se puede ampliar a una estructura tridimensional sin mayor problema.
+\paragraph{}
+El Kernel de este metodo se comporta de forma similar a su predecesor secuancial, probando distintas combinaciones de numeros aleatorios, y guardando en una matriz el estado del minimo encontrado, para luego de forma secuencial recorrer esta matriz para encontrar el valor minimo de todos, este recorrido no se hace de la totalidad de la matriz, si no de una sola posicion de la matriz, quedando de esta forma con complejidad lineal para el Kernel y lineal tambien para la determinacion del menor.
 
 \section{Results}
-put here something to say
-
-\section{Conclusions}
-put here something to say
-
-
-%
-%
-%
-%---------------- From here all are examlpe
-%
-%
-%
-\subsubsection{Sample Heading (Third Level)} Only two levels of
-headings should be numbered. Lower level headings remain unnumbered;
-they are formatted as run-in headings.
-
-\paragraph{Sample Heading (Fourth Level)}
-The contribution should contain no more than four levels of
-headings. Table~\ref{tab1} gives a summary of all heading levels.
-
-\begin{table}
-\caption{Table captions should be placed above the
-tables.}\label{tab1}
-\begin{tabular}{|l|l|l|}
-\hline
-Heading level &  Example & Font size and style\\
-\hline
-Title (centered) &  {\Large\bfseries Lecture Notes} & 14 point, bold\\
-1st-level heading &  {\large\bfseries 1 Introduction} & 12 point, bold\\
-2nd-level heading & {\bfseries 2.1 Printing Area} & 10 point, bold\\
-3rd-level heading & {\bfseries Run-in Heading in Bold.} Text follows & 10 point, bold\\
-4th-level heading & {\itshape Lowest Level Heading.} Text follows & 10 point, italic\\
-\hline
-\end{tabular}
-\end{table}
-
-
-\noindent Displayed equations are centered and set on a separate
-line.
-\begin{equation}
-x + y = z
-\end{equation}
-Please try to avoid rasterized images for line-art diagrams and
-schemas. Whenever possible, use vector graphics instead (see
-Fig.~\ref{fig1}).
+Luego de ejecutar los metodos implementados para problemas de optimizacion con diferentes numeros de variables y restricciones, se encontro que los tiempos de ejecucion no resultaron como se esperaba, aunque el comportamiento de los algoritmos corresponde con el orden de complejidad, la magnitud de los tiempos demuestra la importancia de la experimentacion.
+\paragraph{}
+Asi se tiene que aunque el metodo Simplex tiene una complejidad de orden cuadrado, esto es unicamente en el peor de los casos y este es un caso extraño, ya que en la mayoria de problemas el caso mas comun es de orden lineal, causando asi tiempos de ejecucion menores que la ejecucion de Monte Carlo, que se comporta igualmente con orden lineal pero con un tiempo inicial mayor.
 
 \begin{figure}
 \includegraphics[width=\textwidth]{fig1.eps}
@@ -126,28 +86,11 @@ Please note that short captions are centered, while long ones are
 justified by the macro package automatically.} \label{fig1}
 \end{figure}
 
-\begin{theorem}
-This is a sample theorem. The run-in heading is set in bold, while
-the following text appears in italics. Definitions, lemmas,
-propositions, and corollaries are styled the same way.
-\end{theorem}
-%
-% the environments 'definition', 'lemma', 'proposition', 'corollary',
-% 'remark', and 'example' are defined in the LLNCS documentclass as well.
-%
-\begin{proof}
-Proofs, examples, and remarks have the initial word in italics,
-while the following text appears in normal font.
-\end{proof}
-For citations of references, we prefer the use of square brackets
-and consecutive numbers. Citations using labels or the author/year
-convention are also acceptable. The following bibliography provides
-a sample reference list with entries for journal
-articles~\cite{ref_article1}, an LNCS chapter~\cite{ref_lncs1}, a
-book~\cite{ref_book1}, proceedings without editors~\cite{ref_proc1},
-and a homepage~\cite{ref_url1}. Multiple citations are grouped
-\cite{ref_article1,ref_lncs1,ref_book1},
-\cite{ref_article1,ref_book1,ref_proc1,ref_url1}.
+\section{Conclusions}
+put here something to say
+
+no siempre paralelo es mejor, 
+
 %
 % ---- Bibliography ----
 %
