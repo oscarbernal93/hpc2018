@@ -67,13 +67,14 @@ int main(int argc, char **argv)
         return 1;
     }
     //Vars Declaration
-    int tile_dim = 1024;
-    int numRest,numVars;
+    int tile_dim = 1024,index = 0;
+    int numRest,numVars,i = 0;
+    double zans = 0,z = 0;
     double *gpu_COEF, *cpu_COEF;
     double *gpu_P, *cpu_P;
     double *gpu_Z, *cpu_Z;
     double *gpu_C, *cpu_C;
-    double *gpu_CANS;
+    double *gpu_CANS, *cpu_CANS;
     /*
     cudaError_t err = cudaSuccess;
     */
@@ -98,7 +99,8 @@ int main(int argc, char **argv)
     cpu_COEF = (double*)malloc(drv);
     cpu_P = (double*)malloc(dr);
     cpu_Z = (double*)malloc(dv);
-    cpu_C = (double*)calloc(numVars,sizeof(double));
+    cpu_C = (double*)calloc(numVars+1,sizeof(double));
+    cpu_CANS = (double*)calloc(pow(tile_dim,2)*(numVars + 1),sizeof(double));
 
     err = cudaMalloc((void**)&gpu_COEF,drv);
     if(err != cudaSuccess){printf("Error with COEF\n");exit(1);}
@@ -130,8 +132,24 @@ int main(int argc, char **argv)
     montecarlo<<<grid_dim,block_dim>>>(gpu_COEF,gpu_P,gpu_Z,gpu_C,gpu_CANS,numRest, numVars);
 
     //copy the result to Host mem
-    err = cudaMemcpy(cpu_C,gpu_mR,mRs, cudaMemcpyDeviceToHost);
+    err = cudaMemcpy(cpu_CANS,gpu_CANS,cs, cudaMemcpyDeviceToHost);
     if(err != cudaSuccess){printf("Error Coping Matrix R\n");exit(1);}
+
+    for (i = 0; i < tile_dim*tile_dim; ++i)
+    {
+        z = cpu_CANS[i*(numVars+1)+numVars];
+        if(z < zans)­{
+            zans = z;
+            index = i;
+        }
+    }
+    for (int i = 0; i < numVars; ++i)
+    {
+        C[i] = cpu_CANS[index*(numVars+1)+i];
+    }  
+    //to this point
+    //zans = contains the greather Z
+    //C contains the value of each var 
 
     free(cpu_COEF);
     free(cpu_P);
