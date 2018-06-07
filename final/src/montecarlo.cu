@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 void read_header(FILE* fp,int *numVars,int *numRest);
 void read_data(FILE* fp,double *COEF,double *P,double *Z);
@@ -14,6 +15,7 @@ __global__ void montecarlo(double *COEF,double *P,double *Z,double *C,double *CA
     double z = 0,zans = 0;
     int i = 0,r = 0,j = 0;
     int max=1024;
+    srand(time(NULL));
     // x,y = x * numCol + y
     for(r=0;r<max;r++){
         while(i < numRest && r<max)
