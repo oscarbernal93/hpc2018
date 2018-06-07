@@ -1,106 +1,100 @@
-% This is samplepaper.tex, a sample chapter demonstrating the
-% LLNCS macro package for Springer Computer Science proceedings;
-% Version 2.20 of 2017/10/04
-%
 \documentclass[runningheads]{llncs}
-%
 \usepackage{graphicx}
-% Used for displaying a sample figure. If possible, figure files should
-% be included in EPS format.
-%
-% If you use the hyperref package, please uncomment the following line
-% to display URLs in blue roman font according to Springer's eBook style:
-% \renewcommand\UrlFont{\color{blue}\rmfamily}
 
 \begin{document}
-%
+
 \title{Simplex vs. Montecarlo using parallel computing, a brief comparison.\thanks{Supported by Universidad Tecnológica de Pereira.}}
-%
-%\titlerunning{Abbreviated paper title}
-% If the paper title is too long for the running head, you can set
-% an abbreviated paper title here
-%
+
 \author{Oscar Eduardo Bernal}
-%
+
 \authorrunning{O. Bernal}
-% First names are abbreviated in the running head.
-% If there are more than two authors, 'et al.' is used.
-%
+
 \institute{Universidad Tecnológia de Pereira, Colombia
 \email{}}
-%
-\maketitle              % typeset the header of the contribution
-%
+
+\maketitle        
+
 \begin{abstract}
-The Monte Carlo Method give us a process to solve big problems using randomness, by other side simplex is a method to solve linear optimization ploblems through an iterative process. Using HPC we can have an approach to parallel computing with a good amount of threads, but the Simplex method can't be easily parallelizable because in each iteration it depends of the previous state, while using Monte Carlo each step of the process is completely independient. Even so the question arises, is there really a difference between the Simplex method and the Monte Carlo method in a high-performance environment to solve linear optimization ploblems?
+The Monte Carlo Method give us a process to solve big problems using randomness, by other side simplex is a method to solve linear optimization problems through an iterative process. Using HPC we can have an approach to parallel computing with a good amount of threads, but the Simplex method can't be easily parallelizable because in each iteration it depends of the previous state, while using Monte Carlo each step of the process is completely independent. Even so the question arises, is there really a difference between the Simplex method and the Monte Carlo method in a high-performance environment to solve linear optimization problems?
 
 \keywords{HPC \and linear optimization \and Monte Carlo \and parallel computing \and Simplex}
 \end{abstract}
-%
-%
-%
+
 \section{Introduction}
-Es facil pensar en que un algoritmo puede ser mejor que otro, en especial cuando se trata de hacer tareas en paralelo, pero para poder lograr una comprension real de las implicaciones de una afirmación como esta se requiere, no solo un entendimiento de los algoritmos, si no tambien realizar un proceso de experimentacion, donde se pueda comprobar con datos reales la hipotesis planteada.
+Is easy think that one algorithm is better than other, especially when we are working with parallel computing, but to give a conclusion like this, is needed to have a good comprehension of the subject, the algorithm and made a experimentation process, where we can check, using real information, the given hypothesis.
 
 \subsection{Linear Optimization}
-La optimizacion Lineal, tambien conocida como Programacion Lineal, y es el campo de la Optimizacion que se encarga de resolver problemas donde el objetivo es maximizar una funcion sujeta a una serie de restricciones expresadas mediante inecuaciones lineales. 
+The Linear Optimization, also known as Linear Programming, is in the field of Mathematical optimization, a method to resolve problems where the target is achieve the best outcome subject to some requirements represented by linear inequality constraints.
+Linear programming can be applied to various fields of study. It is widely used in mathematics, in business, economics, and for some engineering problems.
 
 \subsection{Simplex Method}
-El metodo Simplex es un metodo iterativo, que es usado por excelencia en el campo de la Optimizacion Lineal, se comporta como un algoritmo de pivote y va recorriendo los vertices de un poliedro n-dimensional, siendo n el numero de variables.
+The simplex method (or simplex algorithm) is a popular algorithm for linear programming, it uses the constraints as edges of a n-dimensional geometric object called a polytope (where n in the number of variables of the optimization problem), is an pivoting algorithm that do a iterative path over the vertices of the polytope to find the optimal solution.
 
 \subsection{Monte Carlo Method}
-El metodo Monte Carlo es un metodo no determinista, que se utiliza para la aproximacion de problemas matematicos complejos y computacionalmente costos. Tiene su fundamento en la aleatoriedad mediante la cual va generando puntos que se evaluan y determinan posibles soluciones.
+Monte Carlo Method is a non deterministic computerized mathematical technique that allows to get an approximation to the solution of complex mathematical problems, Its fundamental idea is use randomness to solve the problems generating and evaluating points. 
 
 \subsection{Parallel computing}
-La computacion paralela es la forma de computo en la que muchas instrucciones son ejecutadas simultaneamente, parte del principio de que los grandes problemas a menudo se pueden dividir en problemas mas pequeños y resolver individualmente.
+Parallel computing is a computational technique in which many instructions are executed simultaneously, one of his main principles is that large problems can often be divided into smaller problems and solved individually.
 
-\subsection{Hipotesis}
-Teniendo en cuenta la informacion sobre los dos metodos que se abordan en este documento se plantea la siguient hipotesis: 
-Montecarlo es mejor que el metodo Simplex para solucionar problemas de Optimizacion Lineales con un gran numero de variables.
+\subsection{Hypothesis}
+Taking the capacity of Monte Carlo method to solve a large different kinds of problem, to solve linear optimization and mixing with the parallel computing technique appear the main hypothesis of this paper:
+
+\textit{Monte Carlo method is better than Simplex method to solve linear optimization problems with large number of variables.}
 
 \section{Implementation}
-Para poder poner a prueba esta hipotesis se desarrollaron 3 implementaciones, la primera y mas basica es una implementacion secuencial del metodo simplex, la segunda es una implementacion lineal del metodo montecarlo, y la ultima una version concurrente del metodo montecarlo.
+To test the validation of the given hypothesis, the two methods (Simplex and Monte Carlo) have been developed, the Simplex in a basic sequential way, and the Monte Carlo method in a concurrent way.
 
 \subsection{Sequential Simplex Method}
-El metodo Simplex parte de una matriz nxm donde n es el numero de variables del problema y m es el numero de restricciones, sobre esta matriz se empieza a iterar cambiando los valores de ciertas filas y columnas en cada iteracion, hasta que se encuentra la solucion.
-Este metodo tiene una complejidad algoritmica de orden cuadrado O(n2)­ en el peor de los casos, y en el mejor una complejidad de orden lineal (n+m)
-
-\subsection{Sequential Monte Carlo Method}
-El metodo Monte Carlo en su version secuencial realiza un numero fijo de pasos, que para este estudio es de 21.474.836, en los cuales genera n numeros aleatorios y luego realiza m+1 validaciones (siendo n y m el numero de variables y de restricciones respectivamente), para determinar si estos numeros cumplen con las condiciones del algoritmo, este ciclo se realiza multiples veces, obteniendo cada vez distintos valores guardando unicamente el estado para el cual el problema de optimizacion lineal es maximo.
-Este metodo tiene una complejidad algoritmica de orden lineal O(n) en cualquier caso, ya que sin importar el resultado el se ejecuta un numero fija de veces, que no aumenta ni disminuye. 
+The simplex method takes the constraints and the objective function of the linear optimization problem and creates a matrix of nxm dimensions, where n is the number of variables and m the number of constraints, over this matrix the algorithm starts to iterate changing the values of some rows and columns until arrives to the optimal solution.
+This algorithm have a quadratic complexity order O(n\textsuperscript{2}) in the worst case, and a lineal complexity order O(n) in its best case.
 
 \subsection{Parallel Monte Carlo Method}
-La implementacion paralela del metodo de Monte Carlo crea una cantidad fija de hilos en cada bloque, que para este caso son 1024, y una rejilla de 1024 bloques, se utiliza una estructura lineal tanto para la distribucion de la rejilla asi como para la del bloque, para facilitar la comprension del algoritmo, pero esta se puede ampliar a una estructura tridimensional sin mayor problema.
+The concurrent implementation of the Monte Carlo Method starts whit a fixed amount of threads for each block, for this case 1024, and a fixed amount of blocks per grid, that also is 1024, for the logical distribution of the threads and blocks, that can be given by the size of the grid/block in terms of \textit x, \textit y and \textit z, was used a lineal distribution (\textit{x,1,1}), this aiming to make more clear and intuitive the index generation for the resultant vector; Anyway with little modifications can be extended to a full tri-dimensional distribution.
+
 \paragraph{}
-El Kernel de este metodo se comporta de forma similar a su predecesor secuancial, probando distintas combinaciones de numeros aleatorios, y guardando en una matriz el estado del minimo encontrado, para luego de forma secuencial recorrer esta matriz para encontrar el valor minimo de todos, este recorrido no se hace de la totalidad de la matriz, si no de una sola posicion de la matriz, quedando de esta forma con complejidad lineal para el Kernel y lineal tambien para la determinacion del menor.
+The kernel of this implementation generate an fixed amount of random numbers under the constraints and validating the objective function to find an individual optimal solution, all the solutions obtained by each thread are write in the thread's correspondent index of the resultant vector, after this process finished, in the vector is found the best solution.
+By this way the number generation have a lineal complexity order O(n), and the find of the best solution too.
 
 \section{Results}
-Luego de ejecutar los metodos implementados para problemas de optimizacion con diferentes numeros de variables y restricciones, se encontro que los tiempos de ejecucion no resultaron como se esperaba, aunque el comportamiento de los algoritmos corresponde con el orden de complejidad, la magnitud de los tiempos demuestra la importancia de la experimentacion.
-\paragraph{}
-Asi se tiene que aunque el metodo Simplex tiene una complejidad de orden cuadrado, esto es unicamente en el peor de los casos y este es un caso extraño, ya que en la mayoria de problemas el caso mas comun es de orden lineal, causando asi tiempos de ejecucion menores que la ejecucion de Monte Carlo, que se comporta igualmente con orden lineal pero con un tiempo inicial mayor.
+After the execution of the implemented methods for linear optimization problems with a different number of variables and constraints, the execution times shows a unlooked-for results, although the behavior of the algorithms corresponds to the determinated complexity, the scale of the measures is completely unexpected. 
+For this reason, the importance of experimentation is remarkable.
 
 \begin{figure}
 \includegraphics[width=\textwidth]{fig1.eps}
-\caption{tiempo de ejecucion en milisegundos de cada algoritmo para diferentes numeros de variables en los problemas de optimizacion lineal} \label{fig1}
+\caption{Execution time in milliseconds for each algorithm} \label{fig1}
 \end{figure}
 
-Adicionalmente se observo, durante la toma de datos, que dificilmente se encuentran problemas de optimizacion lineal de un gran numero de variables, el problema de mayor tamaño encontrado fue de 8 variables, todos los demas problemas se construyeron artificialmente para probar el comportamiento de los metodos. El valor mas grande probado fue de 22 variables y 23 restricciones. 
 \paragraph{}
-El metodo Monte Carlo, a diferencia del metodo Simplex, encuentra valores cercanos o aproximados a la respuesta esperada, no siempre el valor exacto, y en esto el Metodo Simplex puede llevarle tambien una ventaja, pero esto solo ocurre en los casos en los que es problema tiene una solucion unica. En los casos en que esto no es asi, el metodo Monte Carlo encuentra una solucion factible, en lugar de bloquearse como el metodo simplex.  
+By this way we have the Simplex method with a quadratic complexity order O(n\textsuperscript{2}) in the worst case, but here is where the core of behavior of the results, the worst case is an stranger case, the common case of the majority of the linear optimization problems are solved in a a lineal complexity order O(n) by the Simplex method, causing so the Monte Carlo method take superior execution times that the sequential Simplex.
+
 \paragraph{}
-Para problemas de optimizacion no lineales el metodo Monte Carlo se puede adaptar con pocos cambios y conservando sus propiedades, mientras que el metodo simplex se hace inutil y se requieren dintintos metodos que cambian dependiendo del tipo de problema.
+In addition was observed, during the data collection, that linear optimization problems with a large number of variables were hardly found, the largest problem easily founded was of 8 variables, all other problems were artificially constructed to test the behavior of the methods. The largest problem tested was 22 variables and 23 restrictions.
+
+\paragraph{}
+This means that even if Monte Carlo have better execution times with a gigantic amount of variables, it is useless because the common linear optimization problems have a low number of variables.
+
+\paragraph{}
+The Monte Carlo method, unlike the Simplex method, finds an approximate values really close to the expected response ($Error=1/\sqrt{n}$ , with n equal to the total amount of threads times the number of solutions generated in each thread), but not always the exact value, and in this an important advantage for the Simplex Method, because it get the better answer (if the problem has a unique solution).Besides in the cases where the problem don't have an unique solution, Monte Carlo method finds a feasible solution, instead of being blocked as the simplex method.
+
+\paragraph{}
+For nonlinear optimization problems the Monte Carlo method can be adapted with few changes and conserving its properties, while the simplex method becomes useless and requires different methods that change depending on the kind of problem.
 
 \section{Conclusions}
+
 \paragraph{}
-No siempre paralelo es mejor, es facil pensar que al utilizar una alternativa paralela para la solucion de un problema se pueden obtener mejores resultados, pero esto siempre depende de la naturaleza del problema y es necesario realizar un correcto analisis para determinar si la implementacion de un metodo paralelo es la mejor opcion.
+Not always parallel is better, it is easy to think that by using a parallel alternative for the solution of a problem we can obtain better results, but this always depends on the nature of the problem and it is necessary to have a correct analysis to determine if the implementation of a parallel method is the best option.
+
 \paragraph{}
-El orden de complejidad de un algoritmo es una gran ayuda para conocer el posible desempeño del mismo, pero se debe tener tambien en cuenta el comportamiento comun del mismo, ya que existe la posibilidad que el caso comun no sea el peor de los casos.
+The complexity order of an algorithm is a great help to know the possible performance of it is, but also should keep in mind the common behavior of the algorithm, because there is a possibility that the common case is not the worst case.
+
 \paragraph{}
-En todo proceso de experimentacion es importante tener claramente definida la hipotesis y realizar un buen analisis del problema, pero tambien prestar mucha atencion a los resultados, ya que no siempre el resultado sera e esperado y es importante determinar el porque de estos resultados.
+In every process of experimentation it is important to have clearly defined the hypothesis and do a good analysis of the problem, but also pay attention to the results and the experience, because the result will not always be as expected and it is important to determine the explanation of these results.
+
 \paragraph{}
-La computacion de alto rendimiento es una tecnologia que brinda muchas posibilidades, pero como cualquier tecnologia debe utilizarse responsablemente y su capacidad dependera de la formulacion y la implementacion de las algoritmos que se desarrollen para ella. 
+High performance computing is a technology that offers many possibilities, but as any technological tool must be used with responsibility. The capacity of the developments made using HPC techniques will depend on the formulation and implementation of the correct kind of algorithms. 
+
 \paragraph{}
-El metodo Monte Carlo se presta para resolver toda una gama de problemas diferentes, mientras que el metodo simplex se especializa en una sola clase de problemas y resulta ser muy optimo. De esta forma se puede concluir que una solucion general no siempre es la mejor alternativa, a veces es mejor tener soluciones optimzadas a los requerimientos del problema. 
+The Monte Carlo method allows to solve a whole range of different problems, while the simplex method specializes in a single class of problems but is very good in it. By this way we can concluded that a general solution is not always the best alternative, sometimes it is better to have solutions optimized to the requirements of the problem, and for this reason is important to do a correct analysis of the problem.
 
 %
 % ---- Bibliography ----
